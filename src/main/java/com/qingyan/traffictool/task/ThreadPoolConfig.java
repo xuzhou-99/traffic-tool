@@ -19,13 +19,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class ThreadPoolConfig {
 
-
     public final ExecutorService threadPool = new ThreadPoolExecutor(4, 10,
             30L, TimeUnit.MINUTES,
             new LinkedBlockingQueue<>(1000),
             namedThreadFactory());
-
-
 
     public void stop() {
         threadPool.shutdown();

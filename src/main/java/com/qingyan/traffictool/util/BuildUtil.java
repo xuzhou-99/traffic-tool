@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
 import org.apache.http.HttpHost;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -15,7 +13,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.springframework.stereotype.Component;
 
 import com.qingyan.traffictool.generate.ProxyInfo;
-import com.qingyan.traffictool.task.ThreadPoolConfig;
 
 import cn.altaria.base.http.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -31,9 +28,14 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class BuildUtil {
 
-    @Resource
-    private ThreadPoolConfig threadPoolConfig;
-
+    /**
+     * 构建HttpGet
+     *
+     * @param url  请求Url
+     * @param host 代理ip
+     * @param port 代理端口
+     * @return httpGet
+     */
     public static HttpGet buildGet(String url, String host, Integer port) {
         HttpGet httpGet = new HttpGet(url);
         HttpHost httpHost = new HttpHost(host, port);
@@ -47,15 +49,22 @@ public class BuildUtil {
         return httpGet;
     }
 
-    public static boolean sendProxyGet(String address, int parseInt, String url) {
-        HttpGet httpGet = buildGet(url, address, parseInt);
+    /**
+     * 代理get请求
+     *
+     * @param address 代理Ip
+     * @param port    代理端口
+     * @param url     请求地址
+     * @return 请求是否成功
+     */
+    public static boolean sendProxyGet(String address, int port, String url) {
+        HttpGet httpGet = buildGet(url, address, port);
         try (CloseableHttpResponse execute = HttpClientUtils.httpClient.execute(httpGet);) {
             if (execute != null && execute.getStatusLine().getStatusCode() == 200) {
                 return true;
             }
         } catch (IOException e) {
             log.error("Error: {}", e.getMessage());
-//            throw new RuntimeException(e);
         }
         return false;
     }
@@ -86,7 +95,6 @@ public class BuildUtil {
                 }
             } catch (Exception e) {
                 // TODO Auto-generated catch block
-//                e.printStackTrace();
                 log.error("Error: {}", e.getMessage());
             }
             System.out.format("%s:%s-->%s\n", proxyHost, proxyPort, statusCode);
@@ -120,30 +128,16 @@ public class BuildUtil {
                 }
             } catch (Exception e) {
                 // TODO Auto-generated catch block
-//                e.printStackTrace();
                 log.error("Error: {}", e.getMessage());
             }
             if (statusCode == 200) {
                 proxyInfo.setValid(1);
-            }else {
+            } else {
                 proxyInfo.setValid(0);
             }
             proxyInfo.setUpdatetime(LocalDateTime.now());
             log.info("{}:{} --> {}", proxyHost, proxyPort, statusCode);
         }
-    }
-
-    /**
-     * 代理IP有效检测
-     *
-     * @param proxyIp
-     * @param proxyPort
-     * @param reqUrl
-     */
-    public static void checkProxyIp(String proxyIp, int proxyPort, String reqUrl) {
-        Map<String, Integer> proxyIpMap = new HashMap<>();
-        proxyIpMap.put(proxyIp, proxyPort);
-        checkProxyIp(proxyIpMap, reqUrl);
     }
 
     public static void main(String[] args) {
@@ -154,8 +148,6 @@ public class BuildUtil {
         proxyIpMap.put("183.247.215.218", 30001);
 
         checkProxyIp(proxyIpMap, "http://www.baidu.com");
-
     }
-
 
 }

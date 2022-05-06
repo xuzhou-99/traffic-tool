@@ -4,10 +4,16 @@ import lombok.Data;
 
 @Data
 public class Record {
-
-    private Long id;
-
+    /**
+     * 主键
+     */
+    private Long bh;
+    /**
+     * 访问路径
+     */
     private String url;
-
+    /**
+     * 成功访问次数
+     */
     private int number;
 }

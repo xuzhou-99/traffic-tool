@@ -18,6 +18,8 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ProxyIpCache {
-
+    /**
+     * 代理缓存
+     */
     public static List<ProxyIP> proxyIPList = new ArrayList<>();
 }

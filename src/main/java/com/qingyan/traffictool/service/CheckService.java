@@ -47,6 +47,9 @@ public class CheckService {
     @Value("${proxy.checkUrl}")
     private String checkUrl;
 
+    /**
+     * 爬取代理-从第三方网站获取
+     */
     public void findProxyIps() {
         List<ProxyIP> proxyIpList = ProxyGetUtil.getProxyIP(proxyUrl);
         ProxyIpCache.proxyIPList.addAll(proxyIpList);
@@ -67,6 +70,9 @@ public class CheckService {
         }
     }
 
+    /**
+     * 校验代理有效性
+     */
     public void check() {
         List<ProxyInfo> proxyInfoList = proxyInfoDaoExtend.selectAll();
         if (proxyInfoList.size() > 100) {
@@ -94,9 +100,13 @@ public class CheckService {
         }
     }
 
-
+    /**
+     * 新增访问量
+     *
+     * @param url 访问地址
+     * @param num 访问次数
+     */
     public void addTraffic(String url, int num) {
-
         threadPoolConfig.threadPool.execute(new ProxyRequestRunnable(url, num, proxyInfoDaoExtend));
     }
 }

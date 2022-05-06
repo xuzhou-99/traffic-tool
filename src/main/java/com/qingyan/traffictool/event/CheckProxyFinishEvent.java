@@ -1,6 +1,5 @@
 package com.qingyan.traffictool.event;
 
-import java.time.Clock;
 import java.util.List;
 
 import org.springframework.context.ApplicationEvent;
@@ -11,6 +10,7 @@ import lombok.Getter;
 
 /**
  * CheckProxyFinishEvent
+ * 代理有效性检查结束事件
  *
  * @author xuzhou
  * @version v1.0.0
@@ -26,8 +26,4 @@ public class CheckProxyFinishEvent extends ApplicationEvent {
         this.proxyInfoList = proxyInfoList;
     }
 
-    public CheckProxyFinishEvent(Object source, Clock clock, List<ProxyInfo> proxyInfoList) {
-        super(source, clock);
-        this.proxyInfoList = proxyInfoList;
-    }
 }

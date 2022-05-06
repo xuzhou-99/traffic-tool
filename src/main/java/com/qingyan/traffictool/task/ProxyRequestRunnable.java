@@ -34,10 +34,6 @@ public class ProxyRequestRunnable implements Runnable {
 
     @Override
     public void run() {
-        visit(url, number);
-    }
-
-    public void visit(String url, int number) {
         List<ProxyInfo> proxyInfoList = proxyInfoDaoExtend.selectUseFullProxy();
         log.info("-------- 可用代理 {} 个 --------", proxyInfoList.size());
         List<ProxyIP> ipList = proxyInfoList.stream()
@@ -51,39 +47,38 @@ public class ProxyRequestRunnable implements Runnable {
         int status = 1;
 
         for (int i = 1; ; i++) {
-            log.info("--------第" + i + "批代理IP访问开始--------\n");
+            log.info("--------第 {} 批代理IP访问开始--------", i);
             for (ProxyIP proxyIP : ipList) {
                 if (count < number) {
                     now++;
-                    log.info("现在是" + url + "第 " + now + " 次访问");
-                    log.info("使用的代理为------" + proxyIP.getAddress() + ":" + proxyIP.getPort());
+                    log.info("现在是 {} 第 {} 次访问", url, now);
+                    log.info("使用的代理为------{}:{}", proxyIP.getAddress(), proxyIP.getPort());
                     try {
-
                         boolean result = BuildUtil.sendProxyGet(proxyIP.getAddress(), Integer.parseInt(proxyIP.getPort()), url);
                         if (result) {
                             Thread.sleep(10000);
                             count++;
                             log.info(url + "成功访问次数: " + count);
-                            log.info("代理IP：" + proxyIP.getAddress() + "   端口：" + proxyIP.getPort());
+                            log.info("代理IP：{}   端口：{}", proxyIP.getAddress(), proxyIP.getPort());
                         } else {
                             log.info("代理GET请求发送异常！");
-                            log.info("代理IP：" + proxyIP.getAddress() + "   端口：" + proxyIP.getPort());
+                            log.info("代理IP：{}   端口：{}", proxyIP.getAddress(), proxyIP.getPort());
                         }
                     } catch (Exception ignored) {
 
                     }
-                    log.info("--------本次访问结束--------\n");
+                    log.info("--------本次访问结束--------");
                 } else {
                     status = 0;
                     break;
                 }
             }
-            log.info("--------第" + i + "批代理IP访问结束--------\n");
+            log.info("--------第 {} 批代理IP访问结束--------", i);
             if (status == 0) {
                 break;
             }
         }
 
-        log.info("--------" + url + "访问结束，共访问了" + count + "次--------\n");
+        log.info("-------- {} 访问结束，共访问了 {} 次--------", url, count);
     }
 }

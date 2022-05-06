@@ -2,15 +2,19 @@ package com.qingyan.traffictool.generate;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
+
 import lombok.Data;
 
 /**
  * proxy_info
- * @author 
+ *
+ * @author
  */
 @Data
 public class ProxyInfo implements Serializable {
+    /**
+     * 主键
+     */
     private String bh;
 
     /**

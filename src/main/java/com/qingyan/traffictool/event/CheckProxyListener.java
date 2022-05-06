@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +12,7 @@ import com.qingyan.traffictool.generate.ProxyInfoDaoExtend;
 
 /**
  * CheckProxyListener
+ * 代理有效性检查结束监听器
  *
  * @author xuzhou
  * @version v1.0.0
@@ -26,6 +26,7 @@ public class CheckProxyListener implements ApplicationListener<CheckProxyFinishE
 
     @Override
     public void onApplicationEvent(CheckProxyFinishEvent event) {
+        // 更新检查结果
         List<ProxyInfo> proxyInfoList = event.getProxyInfoList();
         if (!proxyInfoList.isEmpty()) {
             proxyInfoDaoExtend.batchUpdate(proxyInfoList);

@@ -18,7 +18,7 @@ public class CheckProxyRunnable implements Runnable {
 
     private final String requestUrl;
 
-    private ProxyRequestTask proxyRequestTask;
+    private final ProxyRequestTask proxyRequestTask;
 
     public CheckProxyRunnable(String requestUrl, List<ProxyInfo> proxyInfoList, ProxyRequestTask proxyRequestTask) {
         this.requestUrl = requestUrl;
