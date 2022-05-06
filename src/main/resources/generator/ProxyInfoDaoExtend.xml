@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qingyan.traffictool.generate.ProxyInfoDaoExtend">
+    <resultMap id="BaseResultMap" type="com.qingyan.traffictool.generate.ProxyInfo">
+        <id column="bh" jdbcType="VARCHAR" property="bh"/>
+        <result column="ip" jdbcType="VARCHAR" property="ip"/>
+        <result column="port" jdbcType="VARCHAR" property="port"/>
+        <result column="valid" jdbcType="INTEGER" property="valid"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+        <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        bh, ip, port, `valid`, createtime, updatetime
+    </sql>
+    <insert id="batchInsert" parameterType="com.qingyan.traffictool.generate.ProxyInfo">
+        insert into proxy_info (bh,ip, port, `valid`, createtime, updatetime)
+        values
+        <foreach collection="list" index="index" item="item" separator=",">
+            (#{item.bh,jdbcType=VARCHAR},#{item.ip,jdbcType=VARCHAR}, #{item.port,jdbcType=VARCHAR},
+            #{item.valid,jdbcType=INTEGER},
+            #{item.createtime,jdbcType=TIMESTAMP}, #{item.updatetime,jdbcType=TIMESTAMP})
+        </foreach>
+    </insert>
+    <update id="batchUpdate" parameterType="com.qingyan.traffictool.generate.ProxyInfo">
+        <foreach collection="list"  item="item" separator=";">
+            update proxy_info
+            set port = #{item.port,jdbcType=VARCHAR},
+            `valid` = #{item.valid,jdbcType=INTEGER},
+            `updatetime` = #{item.updatetime}
+            where bh = #{item.bh,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from proxy_info
+    </select>
+    <select id="selectUseFullProxy" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from proxy_info
+        where `valid`=1
+    </select>
+</mapper>
