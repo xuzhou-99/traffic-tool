@@ -109,4 +109,11 @@ public class CheckService {
     public void addTraffic(String url, int num) {
         threadPoolConfig.threadPool.execute(new ProxyRequestRunnable(url, num, proxyInfoDaoExtend));
     }
+
+    public List<ProxyInfo> proxyList() {
+        List<ProxyInfo> collect = proxyInfoDaoExtend.selectAll().stream()
+                .filter(o -> o.getValid() == 1)
+                .collect(Collectors.toList());
+        return collect;
+    }
 }

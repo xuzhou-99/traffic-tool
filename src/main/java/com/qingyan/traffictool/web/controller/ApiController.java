@@ -12,6 +12,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.qingyan.traffictool.service.CheckService;
 import com.qingyan.traffictool.util.BuildUtil;
 
+import cn.altaria.base.response.ApiDataResponse;
 import cn.altaria.base.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,6 +60,17 @@ public class ApiController {
     public ApiResponse check() {
         checkService.check();
         return ApiResponse.ofSuccess();
+    }
+
+    /**
+     * 检查代理有效性
+     *
+     * @return 操作结果
+     */
+    @GetMapping(value = "/proxyList")
+    @ResponseBody
+    public ApiResponse proxyList() {
+        return ApiDataResponse.ofSuccess(checkService.proxyList());
     }
 
     /**
